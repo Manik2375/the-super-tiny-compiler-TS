@@ -1,87 +1,17 @@
-interface Token {
-	type: "paren" | "number" | "string" | "name";
-	value: string;
-}
-
-// Abstract Syntax Tree
-interface AST {
-	type: "Program";
-	body: ASTInnerNodes[];
-	_context?: TransformedASTNode[];
-}
-
-type ASTNode = ASTNodeLiteral | ASTNodeExpression | AST; // since AST (the top Program) is also a kind of node
-type ASTInnerNodes = ASTNodeLiteral | ASTNodeExpression; // not the top AST node for the interface
-
-interface ASTNodeLiteral {
-	type: "NumberLiteral" | "StringLiteral";
-	value: string;
-}
-
-interface ASTNodeExpression {
-	type: "CallExpression";
-	name: string;
-	params: ASTNode[];
-	_context?: TransformedASTNode[]; // old ASTNode has link to new Transfomed AST nodes
-}
-
-// types used after transforming
-interface TransformedAST {
-	type: "Program";
-	body: TransformedASTInnerNode[];
-}
-
-type TransformedASTNode =
-	| TransformedAST
-	| TransformedCallExpression
-	| TransformedExpressionStatement
-	| TransformedLiteral;
-
-type TransformedASTInnerNode =
-	| TransformedCallExpression
-	| TransformedExpressionStatement
-	| TransformedLiteral;
-
-type TransfomedExpression = TransformedExpressionStatement | TransformedCallExpression;
-
-interface TransformedExpressionStatement {
-	type: "ExpressionStatement";
-	expression: TransformedCallExpression;
-}
-
-interface TransformedCallExpression {
-	type: "CallExpression";
-	callee: TransformedIdentifier;
-	arguments: TransformedASTNode[];
-}
-
-// to seperate AST and TransformedAST for avoiding confusion (You otherwise have to think how they relate)
-interface TransformedLiteral {
-	type: "NumberLiteral" | "StringLiteral";
-	value: string;
-}
-
-interface TransformedIdentifier {
-	type: "Identifier";
-	name: string;
-}
-
-// *********************************
-
-interface Visitor {
-	NumberLiteral?: VisitorMethod;
-	StringLiteral?: VisitorMethod;
-	CallExpression?: VisitorMethod;
-	Program?: VisitorMethod;
-}
-
-interface VisitorMethod {
-	enter?: (node: ASTNode, parent: ASTNode | null) => void;
-	exit?: (node: ASTNode, parent: ASTNode | null) => void;
-}
+import {
+	Token,
+	AST,
+	ASTNode,
+	ASTInnerNodes,
+	ASTNodeExpression,
+	TransformedAST,
+	TransformedASTNode,
+	TransformedIdentifier,
+	TransfomedExpression,
+	Visitor,
+} from "./types.js";
 
 class Compiler {
-
 	compile(input: string) {
 		const tokens = this.tokenizer(input);
 		const ast = this.parser(tokens);
@@ -188,12 +118,12 @@ class Compiler {
 				continue;
 			}
 
-			if (char === "\"") {
+			if (char === '"') {
 				let value = "";
 
 				char = input[++current];
 
-				while (char !== "\"") {
+				while (char !== '"') {
 					value += char;
 					char = input[++current];
 				}
@@ -201,8 +131,8 @@ class Compiler {
 
 				tokens.push({
 					type: "string",
-					value
-				})
+					value,
+				});
 				continue;
 			}
 
@@ -349,7 +279,6 @@ class Compiler {
 
 			case "CallExpression":
 				return (
-
 					this.codeGenerator(node.callee) +
 					"(" +
 					node.arguments.map((child) => this.codeGenerator(child)).join(", ") +

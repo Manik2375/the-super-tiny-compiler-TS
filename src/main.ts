@@ -7,7 +7,7 @@ import {
 	TransformedAST,
 	TransformedASTNode,
 	TransformedIdentifier,
-	TransfomedExpression,
+	TransformedExpression,
 	Visitor,
 } from "./types.js";
 
@@ -45,7 +45,7 @@ class Compiler {
 		CallExpression: {
 			enter(node, parent) {
 				if (parent && "name" in node && "_context" in parent) {
-					let expression: TransfomedExpression = {
+					let expression: TransformedExpression = {
 						type: "CallExpression",
 						callee: {
 							type: "Identifier",

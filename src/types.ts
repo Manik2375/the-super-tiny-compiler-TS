@@ -42,7 +42,7 @@ export type TransformedASTInnerNode =
 	| TransformedExpressionStatement
 	| TransformedLiteral;
 
-export type TransfomedExpression = TransformedExpressionStatement | TransformedCallExpression;
+export type TransformedExpression = TransformedExpressionStatement | TransformedCallExpression;
 
 export interface TransformedExpressionStatement {
 	type: "ExpressionStatement";

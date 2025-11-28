@@ -1,12 +1,56 @@
-# The super tiny compiler in TS!
+# The super tiny compiler in TypeScript!
 
-Meant for learning purposes
+A TypeScript implementation of a minimal compiler that transforms LISP-style function calls into C syntax.
 
-Basically turn 
-`(add 2 (subtract 4 2))` to `add(2, subtract(4, 2));`
+##  What it does
 
-## README and proper attribution work in progress
+Transforms this:
+```lisp
+(add 2 (subtract 4 2))
+```
 
-### Original work: 
+Into this:
+```c
+add(2, subtract(4, 2));
+```
 
-[https://github.com/jamiebuilds/the-super-tiny-compiler](https://github.com/jamiebuilds/the-super-tiny-compiler)
+
+## Features
+
+- **Tokenizer**: Lexical analysis of input
+- **Parser**: Builds Abstract Syntax Tree (AST)
+- **Transformer**: Converts LISP AST to C AST
+- **Code Generator**: Outputs C code
+- **Full TypeScript**: Type-safe implementation with proper interfaces
+
+
+## Usage
+
+```bash
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
+
+# Run the example
+npm run start
+```
+
+##  Attribution
+
+This project is a TypeScript adaptation of [The Super Tiny Compiler](https://github.com/jamiebuilds/the-super-tiny-compiler) by @jamiebuilds
+
+### Changes Made
+- Converted from JavaScript to TypeScript
+- Added comprehensive type definitions
+- Separated types into dedicated module
+- Added ES module support
+
+## License
+
+This derivative work is also licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+##  Contributing
+
+This is a learning project. Feel free to fork and experiment!
